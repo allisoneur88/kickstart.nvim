@@ -110,6 +110,12 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Folding setup
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = true -- Do not fold by default
+vim.o.foldlevel = 99
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -117,6 +123,8 @@ vim.o.showmode = false
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
+
+
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -245,7 +253,53 @@ rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
+
+
 require('lazy').setup({
+-- pretty collapse  
+  {
+    'anuvyklack/pretty-fold.nvim',
+    config = function()
+      require('pretty-fold').setup {
+        -- Optional config: you can customize these
+      sections = {
+        left = {
+          '▸ ', -- Fold marker
+          'content',
+        },
+        right = {
+          ' ', 'number_of_folded_lines', ': ', 'percentage', ' ',
+        },
+      },
+      fill_char = '•',
+      }
+      
+    end,
+  },
+-- indentation scope vizualization
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    opts = {
+      indent = {
+        char = '│', -- or '▏' or '┊' or your preferred style
+      },
+      scope = {
+        enabled = true,
+        show_start = false,
+        show_end = false,
+      },
+    },
+  },
+  
+  -- matching {([])} brackers
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = function()
+      require('nvim-autopairs').setup {}
+    end,
+  },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
@@ -835,7 +889,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -886,9 +940,17 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
+        transparent = false,       
         styles = {
           comments = { italic = false }, -- Disable italics in comments
+          sidebars = "dark",
+          floats = "dark",
         },
+        --on_colors = function(colors)
+          -- Darken the background even further manually
+          --colors.bg = "#0d0f18"           -- main background
+          --colors.bg_dark = "#0b0d14"      -- sidebars/floats
+        --end,
       }
 
       -- Load the colorscheme here.
@@ -897,6 +959,47 @@ require('lazy').setup({
       vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
+
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha", -- Options: latte, frappe, macchiato, mocha
+        background = {
+          light = "latte",
+          dark = "mocha", -- use the darkest theme
+        },
+        styles = {
+          comments = {}, -- e.g. italic = true
+          conditionals = {},
+          loops = {},
+          functions = {},
+          keywords = {},
+          strings = {},
+          variables = {},
+          numbers = {},
+          booleans = {},
+          properties = {},
+          types = {},
+          operators = {},
+        },
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          telescope = true,
+          -- more integrations can be added
+        },
+      })
+  
+      -- Set the color scheme
+      --vim.cmd.colorscheme("catppuccin")
+    end,
+  },
+  
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -1014,3 +1117,4 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--

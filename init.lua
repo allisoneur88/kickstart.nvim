@@ -192,11 +192,14 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+vim.keymap.set("i", "jj", "<Esc>", { noremap = true, desc = "Insert mode escape" })
+vim.keymap.set("t", "jj", [[<C-\><C-n>]], { noremap = true, desc = "Terminal mode escape" })
+
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -256,26 +259,7 @@ rtp:prepend(lazypath)
 
 
 require('lazy').setup({
--- pretty collapse  
-  {
-    'anuvyklack/pretty-fold.nvim',
-    config = function()
-      require('pretty-fold').setup {
-        -- Optional config: you can customize these
-      sections = {
-        left = {
-          '▸ ', -- Fold marker
-          'content',
-        },
-        right = {
-          ' ', 'number_of_folded_lines', ': ', 'percentage', ' ',
-        },
-      },
-      fill_char = '•',
-      }
-      
-    end,
-  },
+
 -- indentation scope vizualization
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -289,6 +273,7 @@ require('lazy').setup({
         show_start = false,
         show_end = false,
       },
+      exclude = { filetypes = { 'help', 'lazy' } },
     },
   },
   
@@ -297,7 +282,9 @@ require('lazy').setup({
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = function()
-      require('nvim-autopairs').setup {}
+      require('nvim-autopairs').setup {
+        map_c_l = true,
+      }
     end,
   },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -726,7 +713,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -1047,7 +1034,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'go', 'rust', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -111,8 +111,8 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 
 -- Folding setup
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldenable = true -- Do not fold by default
 vim.o.foldlevel = 99
 
@@ -123,8 +123,6 @@ vim.o.foldlevel = 99
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
-
-
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -192,8 +190,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set("i", "jj", "<Esc>", { noremap = true, desc = "Insert mode escape" })
-vim.keymap.set("t", "jj", [[<C-\><C-n>]], { noremap = true, desc = "Terminal mode escape" })
+vim.keymap.set('i', 'jj', '<Esc>', { noremap = true, desc = 'Insert mode escape' })
+vim.keymap.set('t', 'jj', [[<C-\><C-n>]], { noremap = true, desc = 'Terminal mode escape' })
 
 -- TIP: Disable arrow keys in normal mode
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -230,6 +228,24 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Fix intendation for Go
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'go',
+  callback = function()
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.expandtab = false -- real tabs for Go
+  end,
+})
+
+-- Autoformat on w
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.go',
+  callback = function()
+    vim.cmd 'silent! !gofmt -w %'
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -257,10 +273,9 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 
-
 require('lazy').setup({
 
--- indentation scope vizualization
+  -- indentation scope vizualization
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
@@ -276,7 +291,7 @@ require('lazy').setup({
       exclude = { filetypes = { 'help', 'lazy' } },
     },
   },
-  
+
   -- matching {([])} brackers
   {
     'windwp/nvim-autopairs',
@@ -927,16 +942,16 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
-        transparent = false,       
+        transparent = false,
         styles = {
           comments = { italic = false }, -- Disable italics in comments
-          sidebars = "dark",
-          floats = "dark",
+          sidebars = 'dark',
+          floats = 'dark',
         },
         --on_colors = function(colors)
-          -- Darken the background even further manually
-          --colors.bg = "#0d0f18"           -- main background
-          --colors.bg_dark = "#0b0d14"      -- sidebars/floats
+        -- Darken the background even further manually
+        --colors.bg = "#0d0f18"           -- main background
+        --colors.bg_dark = "#0b0d14"      -- sidebars/floats
         --end,
       }
 
@@ -948,15 +963,15 @@ require('lazy').setup({
   },
 
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000,
     config = function()
-      require("catppuccin").setup({
-        flavour = "mocha", -- Options: latte, frappe, macchiato, mocha
+      require('catppuccin').setup {
+        flavour = 'mocha', -- Options: latte, frappe, macchiato, mocha
         background = {
-          light = "latte",
-          dark = "mocha", -- use the darkest theme
+          light = 'latte',
+          dark = 'mocha', -- use the darkest theme
         },
         styles = {
           comments = {}, -- e.g. italic = true
@@ -980,13 +995,12 @@ require('lazy').setup({
           telescope = true,
           -- more integrations can be added
         },
-      })
-  
+      }
+
       -- Set the color scheme
       --vim.cmd.colorscheme("catppuccin")
     end,
   },
-  
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },

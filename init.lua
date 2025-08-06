@@ -110,6 +110,9 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Border for the definitions window
+vim.o.winborder = 'rounded'
+
 -- Folding setup
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -181,6 +184,9 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Diagnostics float
+vim.keymap.set('n', 'D', vim.diagnostic.open_float, { desc = 'Show diagnostics' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -292,7 +298,7 @@ require('lazy').setup({
     },
   },
 
-  -- matching {([])} brackers
+  -- matching {([])} brackets
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',

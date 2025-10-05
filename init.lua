@@ -196,8 +196,8 @@ vim.keymap.set('n', 'D', vim.diagnostic.open_float, { desc = 'Show diagnostics' 
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set('i', 'jj', '<Esc>', { noremap = true, desc = 'Insert mode escape' })
-vim.keymap.set('t', 'jj', [[<C-\><C-n>]], { noremap = true, desc = 'Terminal mode escape' })
+--vim.keymap.set('i', 'jj', '<Esc>', { noremap = true, desc = 'Insert mode escape' })
+--vim.keymap.set('t', 'jj', [[<C-\><C-n>]], { noremap = true, desc = 'Terminal mode escape' })
 
 -- TIP: Disable arrow keys in normal mode
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -723,7 +723,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -1042,7 +1042,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'go', 'rust', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'go', 'rust', 'bash', 'c', 'python', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
